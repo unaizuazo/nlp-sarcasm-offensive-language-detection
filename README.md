@@ -198,7 +198,6 @@ This project is part of an undergraduate thesis. Please refer to the original Me
 
 📧 **Email**: [unaizuazoangulo@gmail.com](mailto:unaizuazoangulo@gmail.com)  
 🔗 **LinkedIn**: [linkedin.com/in/unai-zuazo/](https://www.linkedin.com/in/unai-zuazo/)  
-<> 💼 **Portfolio**: [your-portfolio-link.com](https://your-portfolio-link.com)  
 🐙 **GitHub**: [github.com/unaizuazo](https://github.com/unaizuazo)
 
 ---
