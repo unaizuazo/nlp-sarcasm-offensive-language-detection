@@ -1,72 +1,98 @@
-# Notebooks Guide
+# 📓 Notebooks Guide
 
-This directory contains Jupyter notebooks implementing the complete pipeline for sarcasm and offensive language detection in Spanish social media.
-
-## Notebook Overview
-
-### Data Extraction (Prerequisites)
-
-#### 1. **data_ext.ipynb**
-**Purpose**: Extract and preprocess the Meneame dataset
-
-**What it does**:
-- Loads the main dataset from JSON format (`./data/Meneame/Corpus/polls-F1234_M5.json`)
-- Parses annotated comments with sarcasm counts and nastiness ratings
-- Matches annotations with parsed text from the corpus
-- Converts data to Excel format for downstream processing
-- Outputs: `./data/datos.xlsx` (13,717 comments with labels)
-
-**Key outputs**:
-- CSV/Excel file with columns: `id`, `text`, `nastiness`, `nsarc`, `parsed`
-- nsarc: Number of annotators rating as sarcastic
-- nastiness: Average offensive content score (0.0-1.0)
-
-**Runtime**: ~1-2 hours (processes 68,585+ entries)
+Complete Jupyter notebook implementations for sarcasm and offensive language detection in Spanish social media.
 
 ---
 
-#### 2. **data_ext_test.ipynb**
-**Purpose**: Extract test set from a different batch
+## 📋 Quick Navigation
 
-**What it does**:
+| 📂 Category | 🔗 Notebooks | 📊 Purpose |
+|-----------|-------------|-----------|
+| **Data Extraction** | data_ext, data_ext_test | Load & preprocess dataset |
+| **BERT Models** | BERT, BERT_enhanced, BERT_enhanced_shuffle, BERT_whole | Generate embeddings & train |
+| **Analysis** | Grafs_accuracy_nsarc, Grafs_accuracy_nast | Visualize results |
+
+---
+
+## 🔄 Data Extraction (Prerequisites)
+
+### 1️⃣ **data_ext.ipynb** - Main Dataset Extraction
+```
+⏱️ Runtime: ~1-2 hours  |  📈 Processes: 68,585+ entries
+```
+
+**🎯 Purpose**: Extract and preprocess the Meneame dataset
+
+**📥 What it does**:
+- Loads main dataset from JSON (`./data/Meneame/Corpus/polls-F1234_M5.json`)
+- Parses annotated comments with sarcasm counts and nastiness ratings
+- Matches annotations with parsed text from corpus
+- Converts data to Excel format for downstream processing
+- Outputs: `./data/datos.xlsx` (13,717 comments with labels)
+
+**📤 Key outputs**:
+- CSV/Excel file with columns: `id`, `text`, `nastiness`, `nsarc`, `parsed`
+- **nsarc**: Number of annotators rating as sarcastic
+- **nastiness**: Average offensive content score (0.0-1.0)
+
+**✨ Status**: Essential - Run this first
+
+---
+
+### 2️⃣ **data_ext_test.ipynb** - Test Set Extraction
+```
+⏱️ Runtime: ~5-10 minutes
+```
+
+**🎯 Purpose**: Extract test set from a different batch
+
+**📥 What it does**:
 - Loads test batch from JSON (`./data/Meneame/Corpus/batch-FASE4.json`)
 - Extracts `id`, `text`, and `context` fields
 - Saves to Excel for validation/testing
 - Outputs: `./data/datos_test.xlsx`
 
-**Use case**: Validation on held-out test data from different annotation batch
+**💡 Use case**: Validation on held-out test data from different annotation batch
 
-**Runtime**: ~5-10 minutes
+**✨ Status**: Optional - Useful for independent validation
 
 ---
 
-### BERT Embedding Models
+## 🤖 BERT Embedding Models
 
-#### 3. **BERT.ipynb**
-**Purpose**: Initial exploration and testing of BERT for individual comments
+### 3️⃣ **BERT.ipynb** - Initial Exploration
+```
+📊 Status: Exploratory  |  🎓 Learning: BERT workflow
+```
 
-**What it does**:
+**🎯 Purpose**: Initial exploration and testing of BERT for individual comments
+
+**📥 What it does**:
 - Loads pretrained Spanish BERT (`dccuchile/bert-base-spanish-wwm-cased`)
 - Tests tokenization and embedding extraction on sample texts
 - Demonstrates how to get 768-dimensional sentence embeddings
 - Builds a simple 2-layer MLP classifier on top
 - Tests inference on single comments
 
-**Best for**: Understanding BERT workflow and debugging
+**🎓 Best for**: Understanding BERT workflow and debugging
 
-**Key learning**:
+**💡 Key learning**:
 - BERT tokenization produces 512 context vectors per comment
 - Mean pooling creates sentence-level embeddings
 - Simple architectures sufficient for classification
 
-**Status**: Exploratory, not used for final results
+**✨ Status**: Exploratory, not used for final results
 
 ---
 
-#### 4. **BERT_enhanced.ipynb** ⭐ **PRIMARY MODEL**
-**Purpose**: Complete BERT pipeline for sarcasm detection (nsarc)
+### 4️⃣ **BERT_enhanced.ipynb** - Primary Model ⭐ **STAR THIS**
+```
+⏱️ Runtime: ~45-60 minutes  |  📈 Best accuracy: 85.4%  |  🎪 Task: Sarcasm (nsarc)
+```
 
-**What it does**:
+**🎯 Purpose**: Complete BERT pipeline for sarcasm detection (nsarc)
+
+**📥 What it does**:
 1. Loads dataset and performs 80/20 train/test split
 2. Tokenizes all comments to fixed length (256 tokens)
 3. Generates BERT embeddings for entire training set (~10K comments)
@@ -80,25 +106,29 @@ This directory contains Jupyter notebooks implementing the complete pipeline for
 5. Evaluates on validation set (10% of training)
 6. Reports accuracy, F1-score, confusion matrices
 
-**Key results**:
+**📊 Key results**:
 - **Best accuracy: 85.4%** (1 layer, 30 neurons, lr=0.001)
 - Single layer networks outperform deeper architectures
 - Diminishing returns beyond 25 neurons
-- 6-37 seconds training time depending on architecture
+- 6-37 seconds training time per model
 
-**Main outputs**:
+**📤 Main outputs**:
 - Trained MLP classifiers
 - Accuracy curves vs neuron count
 - Performance metrics
 
-**Runtime**: ~45-60 minutes (mostly BERT embedding)
+**✨ Status**: PRIMARY MODEL - Essential for results
 
 ---
 
-#### 5. **BERT_enhanced_shuffle.ipynb**
-**Purpose**: Alternative pipeline with shuffled data for nastiness detection
+### 5️⃣ **BERT_enhanced_shuffle.ipynb** - Nastiness Detection
+```
+⏱️ Runtime: ~45-60 minutes  |  📈 Best accuracy: 85.8%  |  🎪 Task: Nastiness
+```
 
-**What it does**:
+**🎯 Purpose**: Alternative pipeline with shuffled data for nastiness detection
+
+**📥 What it does**:
 - Same as BERT_enhanced but with important differences:
   - Shuffles dataset before splitting (`data.sample(frac=1)`)
   - Uses **nastiness labels** instead of sarcasm (nsarc)
@@ -107,21 +137,25 @@ This directory contains Jupyter notebooks implementing the complete pipeline for
 - Hyperparameter optimization same as enhanced version
 - Generates accuracy vs architecture plots
 
-**Key results**:
+**📊 Key results**:
 - **Best accuracy: 85.8%** (3 layers, 25 neurons, lr=0.01)
 - Deeper networks slightly better for nastiness than sarcasm
 - Training time: 2-37 seconds per model
 
-**Use case**: Demonstrates both detection tasks work well with BERT
+**💡 Use case**: Demonstrates both detection tasks work well with BERT
 
-**Runtime**: ~45-60 minutes
+**✨ Status**: ALTERNATIVE MODEL - Good for comparison
 
 ---
 
-#### 6. **BERT_whole.ipynb**
-**Purpose**: Generate embeddings for entire dataset (full 13,717 comments)
+### 6️⃣ **BERT_whole.ipynb** - Full Dataset Embeddings
+```
+⏱️ Runtime: ~1.5-2 hours  |  📦 Output: Tensor files  |  📊 Coverage: ALL 13,717 comments
+```
 
-**What it does**:
+**🎯 Purpose**: Generate embeddings for entire dataset (full 13,717 comments)
+
+**📥 What it does**:
 1. Loads all comments (no train/test split)
 2. Tokenizes all 13,717 comments
 3. Processes through BERT in batches
@@ -132,25 +166,29 @@ This directory contains Jupyter notebooks implementing the complete pipeline for
    - `nsarc_tensor.pt`: Sarcasm labels
    - `nast_tensor.pt`: Nastiness labels
 
-**Purpose**: Useful for:
+**💡 Purpose**: Useful for:
 - Creating global embedding space for visualization
 - Transfer learning to other Spanish NLP tasks
 - Ensemble methods using full dataset
 
-**Key outputs**:
+**📤 Key outputs**:
 - PyTorch tensor files with full embeddings
 - Can be reused without re-running BERT
 
-**Runtime**: ~1.5-2 hours (processes all 13,717 comments)
+**✨ Status**: SUPPORTING - Useful for advanced analysis
 
 ---
 
-### Results & Visualization
+## 📊 Results & Visualization
 
-#### 7. **Grafs_accuracy_nsarc.ipynb** 📊
-**Purpose**: Analyze and visualize sarcasm detection performance
+### 7️⃣ **Grafs_accuracy_nsarc.ipynb** - Sarcasm Analysis
+```
+📊 Focus: Sarcasm detection (nsarc)  |  🎨 Output: PNG graphs
+```
 
-**What it does**:
+**🎯 Purpose**: Analyze and visualize sarcasm detection performance
+
+**📥 What it does**:
 1. Loads pretrained embeddings and sarcasm labels
 2. Tests MLP architectures varying:
    - Number of hidden layers: 1, 2, 3
@@ -162,81 +200,104 @@ This directory contains Jupyter notebooks implementing the complete pipeline for
    - **Training time vs neurons**
    - **Accuracy vs learning rate**
 
-**Key visualizations**:
+**📊 Key visualizations**:
 - 1 layer networks plateau at 85%+ accuracy
 - 2-3 layers show minimal improvement
 - Optimal: 25-30 neurons, 1 layer
 - Learning rates 0.001-0.01 best
 - Training time: 5-37 seconds depending on architecture
 
-**Output format**: High-resolution PNG graphs saved to results folder
+**📤 Output format**: High-resolution PNG graphs
+
+**✨ Status**: RESULTS ANALYSIS - Best practice demonstration
 
 ---
 
-#### 8. **Grafs_accuracy_nast.ipynb** 📊
-**Purpose**: Analyze and visualize nastiness detection performance
+### 8️⃣ **Grafs_accuracy_nast.ipynb** - Nastiness Analysis
+```
+📊 Focus: Nastiness detection  |  🎨 Output: PNG graphs
+```
 
-**What it does**:
+**🎯 Purpose**: Analyze and visualize nastiness detection performance
+
+**📥 What it does**:
 - Same analysis as Grafs_accuracy_nsarc but for **nastiness labels**
 - Generates equivalent set of plots for offensive language detection
 
-**Key difference from sarcasm**:
+**🔄 Key difference from sarcasm**:
 - 3-layer networks perform slightly better (85.8% vs 85.4%)
 - Requires different learning rates (0.01 better than 0.001)
 - More stable with increased depth
 
-**Output format**: PNG graphs with comparative analysis
+**📤 Output format**: PNG graphs with comparative analysis
+
+**✨ Status**: RESULTS ANALYSIS - Complete comparison
 
 ---
 
-## Workflow Recommended Sequence
+## 🚀 Workflow Recommendations
 
-### Option 1: Full Pipeline
+### Option 1️⃣: Minimal Pipeline (Quick)
 ```
-1. data_ext.ipynb                 [Extract dataset]
-2. BERT_enhanced.ipynb            [Train sarcasm model]
-3. Grafs_accuracy_nsarc.ipynb     [Analyze results]
+1. data_ext.ipynb                 [~1-2 hours - Extract dataset]
+2. BERT_enhanced.ipynb            [~45-60 min - Train sarcasm model]
+3. Grafs_accuracy_nsarc.ipynb     [~5 min - Analyze results]
 ```
+**⏱️ Total Time**: ~2.5-3 hours | **📊 Output**: Sarcasm detection results
 
-### Option 2: Complete Analysis
-```
-1. data_ext.ipynb
-2. BERT_enhanced.ipynb            [Sarcasm detection]
-3. BERT_enhanced_shuffle.ipynb    [Nastiness detection]
-4. Grafs_accuracy_nsarc.ipynb     [Sarcasm analysis]
-5. Grafs_accuracy_nast.ipynb      [Nastiness analysis]
-```
+---
 
-### Option 3: Data Preparation Only
+### Option 2️⃣: Complete Analysis (Recommended)
+```
+1. data_ext.ipynb                    [Extract main dataset]
+2. BERT_enhanced.ipynb               [Train sarcasm detection]
+3. BERT_enhanced_shuffle.ipynb       [Train nastiness detection]
+4. Grafs_accuracy_nsarc.ipynb        [Analyze sarcasm results]
+5. Grafs_accuracy_nast.ipynb         [Analyze nastiness results]
+```
+**⏱️ Total Time**: ~3-4 hours | **📊 Output**: Full comparative analysis
+
+---
+
+### Option 3️⃣: Advanced Usage (Data Prep Only)
 ```
 1. data_ext.ipynb
 2. data_ext_test.ipynb
-3. BERT_whole.ipynb               [Generate all embeddings]
+3. BERT_whole.ipynb               [Generate embeddings for full dataset]
 ```
 Then use embeddings for custom models or transfer learning.
+**💡 Use case**: Custom models, ensemble methods, visualization
 
 ---
 
-## Technical Details
+## 🔧 Technical Details
 
-### Data Flow
+### 📊 Data Flow
 ```
-Raw JSON → Excel (data_ext) → BERT embeddings → MLP classification → Results
+Raw JSON 
+   ↓
+data_ext.ipynb (Excel file)
+   ↓
+BERT embedding extraction
+   ↓
+MLP classification training
+   ↓
+Results visualization
 ```
 
-### Embedding Process
+### 🧠 Embedding Process
 1. **Tokenization**: Convert text to token IDs (length 256, padded/truncated)
 2. **BERT**: Generate 768-dim token embeddings using Spanish BERT
 3. **Pooling**: Average across all tokens to get sentence embedding
 4. **Normalization**: Optional - data already normalized by BERT
 
-### Classification Details
+### 🤖 Classification Details
 - **Classifier**: Scikit-learn MLPClassifier
 - **Training**: Adam optimizer with L2 regularization
 - **Validation**: 10% holdout cross-validation
 - **Balancing**: SMOTE or RandomOverSampler to handle class imbalance
 
-### Hyperparameter Grid
+### 🎯 Hyperparameter Grid
 ```
 Layers:     [1, 2, 3]
 Neurons:    [1, 5, 10, 15, 20, 25, 30] per layer
@@ -246,9 +307,9 @@ Epochs:     1000 (with early stopping)
 
 ---
 
-## File Dependencies
+## 📦 File Dependencies
 
-| Notebook | Requires | Outputs |
+| 📓 Notebook | 📥 Requires | 📤 Outputs |
 |----------|----------|---------|
 | data_ext.ipynb | JSON dataset | `./data/datos.xlsx` |
 | data_ext_test.ipynb | JSON test batch | `./data/datos_test.xlsx` |
@@ -261,14 +322,14 @@ Epochs:     1000 (with early stopping)
 
 ---
 
-## Important Notes
+## ⚠️ Important Notes
 
-### Dataset Location
+### 🔐 Dataset Location
 - All notebooks use relative path `./data/`
 - Adjust to your Meneame dataset location
 - Download from Meneame repository separately
 
-### Computational Requirements
+### 💻 Computational Requirements
 - **GPU**: Not required but recommended for BERT embedding (3-5x speedup)
 - **RAM**: 8GB minimum, 16GB recommended (for batch processing)
 - **Runtime**: 
@@ -276,33 +337,43 @@ Epochs:     1000 (with early stopping)
   - BERT embedding alone: ~1-2 hours
   - MLP training: 5-60 seconds per model
 
-### Known Limitations
-- Spanish-specific: Model trained only on Spanish text
-- Domain-specific: Best performance on social media comments
-- Comment length: Optimized for typical comment length (256 tokens)
-- Batch effects: Results may vary slightly between runs (randomness in initialization)
+### ⚡ Known Limitations
+- 🇪🇸 Spanish-specific: Model trained only on Spanish text
+- 📱 Domain-specific: Best performance on social media comments
+- 📝 Comment length: Optimized for typical comment length (256 tokens)
+- 🎲 Batch effects: Results may vary slightly between runs (randomness in initialization)
 
 ---
 
-## Troubleshooting
+## 🐛 Troubleshooting
 
-**Out of Memory Error during BERT**:
-- Reduce batch size in BERT processing loops (line with `batch_size=32`)
+### ❌ Out of Memory Error during BERT
+```
+Solution:
+- Reduce batch size in BERT processing loops (line with batch_size=32)
 - Process fewer comments at a time
+- Use GPU if available
+```
 
-**Very Low Accuracy**:
+### ❌ Very Low Accuracy
+```
+Solution:
 - Check data loading - ensure Excel file has correct columns
 - Verify SMOTE is applied (handles imbalanced data)
 - Check learning rate - too high or too low causes poor convergence
+```
 
-**Slow BERT Processing**:
+### ❌ Slow BERT Processing
+```
+Solution:
 - Consider using GPU (install CUDA+cuDNN)
 - Reduce sequence length if longer tokens aren't needed
 - Process in smaller batches with more iterations
+```
 
 ---
 
-## Citation
+## 📚 Citation
 
 If you use these notebooks, please cite:
 ```
@@ -312,6 +383,19 @@ Undergraduate Dissertation in Mathematics. [University Name]
 
 ---
 
-**Last Updated**: April 2026
-**Python Version**: 3.9+
-**Main Dependencies**: PyTorch, Transformers, Scikit-learn
+## 👤 Author
+
+**[YOUR NAME]**
+
+📧 Email: [your.email@example.com](mailto:your.email@example.com)  
+🔗 LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
+
+---
+
+<div align="center">
+
+**Happy analyzing! 🚀**
+
+*Last Updated: April 2026*
+
+</div>
