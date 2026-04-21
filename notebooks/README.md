@@ -377,18 +377,17 @@ Solution:
 
 If you use these notebooks, please cite:
 ```
-[Your Name] (2024). "NLP Sarcasm and Offensive Language Detection in Spanish Social Media"
-Undergraduate Dissertation in Mathematics. [University Name]
+Unai Zuazo (2024). "Sarcasm and offensive language detection in social media using machine learning techniques" Undergraduate Dissertation in Mathematics. Universidad del País Vasco UPV/EHU
 ```
 
 ---
 
 ## 👤 Author
 
-**[YOUR NAME]**
+**Unai Zuazo**
 
-📧 Email: [your.email@example.com](mailto:your.email@example.com)  
-🔗 LinkedIn: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
+📧 Email: [unaizuazoangulo@gmail.com](mailto:unaizuazoangulo@gmail.com)  
+🔗 LinkedIn: [linkedin.com/in/unai-zuazo/](https://www.linkedin.com/in/unai-zuazo/)
 
 ---
 

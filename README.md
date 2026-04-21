@@ -1,6 +1,6 @@
-# 🎯 NLP Sarcasm and Offensive Language Detection in Spanish Social Media
+# 🎯 Sarcasm and offensive language detection in social media using machine learning techniques
 
-> Detecting sarcasm and offensive language in Spanish social media using BERT embeddings and machine learning  
+> Sarcasm and offensive language detection in social media using machine learning techniques  
 > *Undergraduate Dissertation (TFG) in Mathematics*
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
@@ -196,10 +196,10 @@ This project is part of an undergraduate thesis. Please refer to the original Me
 
 **[YOUR NAME]**
 
-📧 **Email**: [your.email@example.com](mailto:your.email@example.com)  
-🔗 **LinkedIn**: [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)  
-💼 **Portfolio**: [your-portfolio-link.com](https://your-portfolio-link.com)  
-🐙 **GitHub**: [github.com/yourprofile](https://github.com/yourprofile)
+📧 **Email**: [unaizuazoangulo@gmail.com](mailto:unaizuazoangulo@gmail.com)  
+🔗 **LinkedIn**: [linkedin.com/in/unai-zuazo/](https://www.linkedin.com/in/unai-zuazo/)  
+<> 💼 **Portfolio**: [your-portfolio-link.com](https://your-portfolio-link.com)  
+🐙 **GitHub**: [github.com/unaizuazo](https://github.com/unaizuazo)
 
 ---
 
@@ -207,9 +207,8 @@ This project is part of an undergraduate thesis. Please refer to the original Me
 
 Found this project interesting? Want to collaborate or have questions?
 
-- ✉️ **Email me** at [your.email@example.com](mailto:your.email@example.com)
-- 💼 **Connect on LinkedIn** at [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
-- ⭐ **Star this repository** if you found it helpful!
+- ✉️ **Email me** at [unaizuazoangulo@gmail.com](mailto:unaizuazoangulo@gmail.com)
+- 💼 **Connect on LinkedIn** at [linkedin.com/in/unai-zuazo/](https://www.linkedin.com/in/unai-zuazo/)
 
 ---
 
